@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="8; URL=/generate/{{ file_id }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generating Flyer...</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f9f9f9;
+        color: #333;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .center-wrapper {
+        text-align: center;
+      }
+
+      .spinner {
+        margin: 0 auto 30px;
+        width: 50px;
+        height: 50px;
+        border: 5px solid #ccc;
+        border-top: 5px solid #000;
+        border-radius: 50%;
+        animation: spin 0.5s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .transition-text {
+        font-size: 1.5rem;
+        font-weight: 600;
+        transition: opacity 0.5s ease-in-out;
+        opacity: 1;
+        min-height: 1.5em;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="center-wrapper">
+      <div class="spinner"></div>
+      <p class="transition-text" id="statusText">Please wait...</p>
+    </div>
+
+    <script>
+      const phrases = [
+        "Please wait...",
+        "Processing your flyer...",
+        "Optimizing layout...",
+        "Your flyer is being generated...",
+        "Almost there...",
+      ];
+
+      let i = 0;
+      const textElem = document.getElementById("statusText");
+
+      setInterval(() => {
+        textElem.style.opacity = 0;
+
+        setTimeout(() => {
+          i = (i + 1) % phrases.length;
+          textElem.textContent = phrases[i];
+          textElem.style.opacity = 1;
+        }, 500);
+      }, 2500);
+    </script>
+  </body>
+</html>

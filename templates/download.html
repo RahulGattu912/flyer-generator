@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Download Flyer</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        background: #f7f7f7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        text-align: center;
+        background: #fff;
+        padding: 50px 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        margin-bottom: 20px;
+        font-size: 2rem;
+        color: #e91e63;
+      }
+
+      .download-btn {
+        background: #e91e63;
+        color: #fff;
+        font-weight: 700;
+        border: none;
+        padding: 16px 40px;
+        border-radius: 10px;
+        font-size: 1.3rem;
+        cursor: pointer;
+        margin-top: 30px;
+        transition: background 0.2s;
+      }
+
+      .download-btn:hover {
+        background: #ff6b35;
+      }
+
+      p {
+        margin-top: 15px;
+        font-size: 1rem;
+        color: #666;
+      }
+    </style>
+    <script>
+      function downloadAndRedirect() {
+        window.location.href = "{{ pdf_path }}";
+        setTimeout(function () {
+          window.location.href = "/";
+        }, 2000); // Redirect after 2 seconds
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎉 Your flyer is ready!</h1>
+      <button class="download-btn" onclick="downloadAndRedirect()">
+        Download Flyer PDF
+      </button>
+      <p>You will be redirected to the upload page after download.</p>
+    </div>
+  </body>
+</html>

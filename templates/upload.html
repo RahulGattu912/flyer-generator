@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Upload CSV - Flyer Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/flyer_style.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f857a6, #ff5858);
+        color: #333;
+      }
+
+      .form-container {
+        background: #fff;
+        padding: 50px 40px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        width: 90%;
+        max-width: 450px;
+        transition: transform 0.3s ease;
+      }
+
+      .form-container:hover {
+        transform: translateY(-5px);
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        font-size: 2rem;
+        font-weight: 800;
+        color: #ff5858;
+      }
+
+      .drop-zone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 150px;
+        border: 2px dashed #ccc;
+        border-radius: 15px;
+        background: #f9f9f9;
+        transition: background 0.3s ease, border-color 0.3s;
+        cursor: pointer;
+        margin-bottom: 20px;
+        padding: 20px;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
+      }
+
+      .drop-zone.dragover {
+        background-color: #ffeaea;
+        border-color: #ff5858;
+      }
+
+      .drop-zone p {
+        margin: 0;
+        font-size: 1rem;
+        color: #888;
+      }
+
+      .file-name {
+        margin-top: 10px;
+        font-weight: 600;
+        color: #444;
+      }
+
+      button {
+        background: #ff5858;
+        color: white;
+        font-size: 1rem;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        font-weight: bold;
+      }
+
+      button:hover {
+        background: #e94e4e;
+      }
+
+      .flash {
+        color: #d32f2f;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Upload Product CSV</h2>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <p class="flash">{{ messages[0] }}</p>
+      {% endif %} {% endwith %}
+
+      <form id="upload-form" method="POST" enctype="multipart/form-data">
+        <label for="file" class="drop-zone" id="drop-zone">
+          <p>📥 Drag & drop CSV here or click to browse</p>
+          <p class="file-name" id="file-name">No file selected</p>
+        </label>
+        <input type="file" name="file" id="file" accept=".csv" required />
+        <button type="submit">Upload and Generate Flyer</button>
+      </form>
+    </div>
+
+    <script>
+      const dropZone = document.getElementById("drop-zone");
+      const fileInput = document.getElementById("file");
+      const fileNameDisplay = document.getElementById("file-name");
+
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
+      });
+
+      dropZone.addEventListener("dragleave", () => {
+        dropZone.classList.remove("dragover");
+      });
+
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          const file = files[0];
+          if (file.type === "text/csv" || file.name.endsWith(".csv")) {
+            fileInput.files = files;
+            fileNameDisplay.textContent = file.name;
+          } else {
+            alert("Please upload a valid .csv file");
+          }
+        }
+      });
+
+      dropZone.addEventListener("click", () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener("change", () => {
+        if (fileInput.files.length > 0) {
+          fileNameDisplay.textContent = fileInput.files[0].name;
+        }
+      });
+    </script>
+  </body>
+</html>

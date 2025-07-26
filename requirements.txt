@@ -1,0 +1,5 @@
+Flask
+pandas
+jinja2
+weasyprint
+gunicorn
