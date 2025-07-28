@@ -7,9 +7,9 @@ body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 40px;
-  background: url('static/images/design1.png') no-repeat center center;
+  background: url('static/images/design2.png') no-repeat center center;
   background-size: cover;
-  color: #4b3f3f; /* Muted brown for text */
+  color: #4e4039; /* soft dark brown */
 }
 
 .flyer-container {
@@ -25,14 +25,14 @@ body {
 
 .flyer-title {
   font-size: 3rem;
-  color: #cc8b86; /* Soft clay/pink tone */
+  color: #a78b63; /* gold/tan tone */
   font-weight: 900;
   margin-bottom: 5px;
 }
 
 .flyer-subtitle {
   font-size: 1.2rem;
-  color: #86696c; /* Dusty rose */
+  color: #7c6a58;
   font-weight: 600;
 }
 
@@ -45,20 +45,23 @@ body {
 }
 
 .product-card {
-  flex: 1;
-  background: #fdf9f8; /* Very soft peach-white */
-  border: 2px solid #f0c7be; /* Peachy border */
+  background: #fbf9f5;
+  border: 2px solid #dac2a6; /* beige border */
   border-radius: 15px;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 5px 10px rgba(80, 59, 59, 0.05);
+  box-shadow: 0 5px 10px rgba(125, 107, 84, 0.08);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-img-wrap {
   height: 180px;
   margin-bottom: 15px;
-  background: #fdeee7; /* Light blush background */
+  background: #f5ede3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -75,7 +78,7 @@ body {
 .product-name {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #b1766f; /* Warm muted mauve */
+  color: #8b6f4e;
   text-transform: uppercase;
 }
 
@@ -83,8 +86,8 @@ body {
   position: absolute;
   top: -10px;
   left: -10px;
-  background: #f7d1cd; /* Light coral-pink */
-  color: #5c3d3d; /* Rich brown text */
+  background: #d1b28f; /* muted pastel tan */
+  color: #3e2f1f;
   font-weight: bold;
   padding: 10px 20px;
   font-size: 1.1rem;
@@ -95,6 +98,14 @@ body {
   text-align: center;
   margin-top: 30px;
   font-size: 1rem;
-  color: #7c6767;
+  color: #7b6958;
   font-weight: 600;
+}
+
+/* Responsive fallback (optional) */
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+  }
 }

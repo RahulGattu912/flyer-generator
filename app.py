@@ -3,14 +3,17 @@ import os
 import pandas as pd
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML, CSS
-import itertools
 import uuid
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+def chunks(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
 
 
 def generate_flyer(csv_path, output_pdf_path):
@@ -19,18 +22,31 @@ def generate_flyer(csv_path, output_pdf_path):
     df = pd.read_csv(csv_path)
     if 'image_url' not in df.columns:
         df['image_url'] = 'https://images.unsplash.com/photo-1509042239860-f550ce710b93'
-    items_data = df.to_dict('records')
 
-    template = env.get_template('templates/flyer_template.html')
-    css_path = os.path.join(base_path, 'static/css/flyer_style.css')
-    css = CSS(filename=css_path)
-    chunk_size = 4
+    items_data = df.to_dict('records')
+    chunk_size = 4  # For Template A (4 items) and Template B (3 items)
+
+    template_a = env.get_template('templates/flyer_template.html')
+    template_b = env.get_template('templates/flyer_template_b.html')
+    css_a = CSS(filename=os.path.join(base_path, 'static/css/flyer_style.css'))
+    css_b = CSS(filename=os.path.join(base_path, 'static/css/flyer_style_b.css'))
+
     rendered_docs = []
 
     for i in range(0, len(items_data), chunk_size):
-        html = template.render(items=items_data[i:i+chunk_size])
+        chunk = items_data[i:i+chunk_size]
+        if (i // chunk_size) % 2 == 0:
+            template = env.get_template('templates/flyer_template.html')
+            css_path = os.path.join(base_path, 'static/css/flyer_style.css')
+        else:
+            template = env.get_template('templates/flyer_template_b.html')
+            css_path = os.path.join(base_path, 'static/css/flyer_style_b.css')
+
+        html = template.render(items=chunk)
+        css = CSS(filename=css_path)
         doc = HTML(string=html, base_url=base_path).render(stylesheets=[css])
         rendered_docs.append(doc)
+
 
     if not rendered_docs:
         return None
@@ -74,20 +90,17 @@ def download(file_id):
     path = os.path.join(app.config['UPLOAD_FOLDER'], f"{file_id}.pdf")
     return render_template('download.html', file_id=file_id, pdf_path=url_for('send_pdf', file_id=file_id))
 
-# Serve the actual PDF file
+
 @app.route('/send_pdf/<file_id>')
 def send_pdf(file_id):
     pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{file_id}.pdf")
     csv_path = os.path.join(app.config['UPLOAD_FOLDER'], f"{file_id}.csv")
     response = send_file(pdf_path, as_attachment=True, download_name='flyer.pdf')
-    # Delete files after sending
     try:
-        if os.path.exists(pdf_path):
-            os.remove(pdf_path)
-        if os.path.exists(csv_path):
-            os.remove(csv_path)
+        os.remove(pdf_path)
+        os.remove(csv_path)
     except Exception as e:
-        print(f"Error deleting files: {e}")
+        print(f"Cleanup error: {e}")
     return response
 
 
